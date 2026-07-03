@@ -1023,6 +1023,118 @@
     }
   }
 
+
+  /* v1.4.8: keep setting controls inside their rows */
+  .settings .field {
+    grid-template-columns: minmax(116px, 1fr) auto;
+    overflow: hidden;
+  }
+
+  .settings .field select,
+  .settings .field input {
+    justify-self: end;
+    min-width: 0;
+    width: 168px;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .settings .order-field select {
+    width: 220px;
+    max-width: min(220px, 100%);
+  }
+
+  .settings .theme-field select,
+  .settings .language-field select {
+    width: 168px;
+    max-width: min(168px, 100%);
+  }
+
+  @media (max-width: 1180px) {
+    .settings .field {
+      grid-template-columns: minmax(116px, 1fr) auto;
+    }
+
+    .settings .field select,
+    .settings .field input {
+      max-width: 100%;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .settings .field {
+      grid-template-columns: 1fr;
+      overflow: visible;
+    }
+
+    .settings .field select,
+    .settings .field input,
+    .settings .order-field select,
+    .settings .theme-field select,
+    .settings .language-field select {
+      width: 100%;
+      max-width: 100%;
+      justify-self: stretch;
+    }
+  }
+
+
+  /* v1.4.11: v1.4.8 layout with enough width for full rank-order labels */
+  .hero {
+    grid-template-columns: minmax(0, 1.22fr) minmax(420px, .88fr);
+  }
+
+  .settings .field {
+    grid-template-columns: minmax(120px, 1fr) auto;
+    overflow: visible;
+  }
+
+  .settings .field select,
+  .settings .field input {
+    justify-self: end;
+    min-width: 0;
+  }
+
+  .settings .order-field select {
+    width: 288px;
+    max-width: 288px;
+  }
+
+  .settings .theme-field select,
+  .settings .language-field select {
+    width: 170px;
+    max-width: 170px;
+  }
+
+  @media (max-width: 1180px) {
+    .hero {
+      grid-template-columns: 1fr;
+    }
+
+    .settings .field {
+      grid-template-columns: minmax(120px, 1fr) auto;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .settings .field {
+      grid-template-columns: 1fr;
+      overflow: visible;
+    }
+
+    .settings .field select,
+    .settings .field input,
+    .settings .order-field select,
+    .settings .theme-field select,
+    .settings .language-field select {
+      width: 100%;
+      max-width: 100%;
+      justify-self: stretch;
+    }
+  }
+
 </style>
 </head>
 <body>
@@ -1036,16 +1148,16 @@
     <section class="panel settings">
       <div class="settings-title">
         <strong id="settingsTitle"></strong>
-        <span>v1.4.7 · Author: BertYin</span>
+        <span>v1.4.11 · Author: BertYin</span>
       </div>
-      <div class="field">
+      <div class="field theme-field">
         <label id="themeLabel" for="themeSelect"></label>
         <select id="themeSelect" onchange="changeTheme(this.value)">
           <option value="light"></option>
           <option value="dark"></option>
         </select>
       </div>
-      <div class="field">
+      <div class="field order-field">
         <label id="orderLabel" for="orderSelect"></label>
         <select id="orderSelect" onchange="changeOrder(this.value)">
           <option value="aceHigh">A → K → Q → J → 10 → ... → 2</option>
@@ -1054,7 +1166,7 @@
           <option value="lowHigh">2 → 3 → ... → K → A</option>
         </select>
       </div>
-      <div class="field">
+      <div class="field language-field">
         <label id="languageLabel" for="languageSelect"></label>
         <select id="languageSelect" onchange="changeLang(this.value)">
           <option value="zh">中文</option>
@@ -1139,7 +1251,7 @@ const I18N = {
   zh: {
     htmlLang: "zh-CN",
     appTitle: "三角洲阿萨拉牌盒记牌器",
-    subtitle: "本地优先的阿萨拉牌盒收集工具。无需登录，不上传数据。支持数量记录、重复牌统计、缺卡清单、搜索筛选、中英文界面、点数排序、浅色/深色模式、JSON/CSV 导出与 JSON 导入",
+    subtitle: "本地优先的阿萨拉牌盒收集工具。无需登录，不上传数据。支持数量记录、重复牌统计、缺卡清单、搜索筛选、中英文界面、点数排序、浅色/深色模式、JSON/CSV 导出与 JSON 导入。",
     settings: "设置",
     language: "语言",
     order: "点数排序",
