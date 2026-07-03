@@ -71,7 +71,7 @@
 
   .hero {
     display: grid;
-    grid-template-columns: minmax(0, 1.12fr) minmax(320px, .88fr);
+    grid-template-columns: minmax(0, 1.48fr) minmax(300px, .62fr);
     gap: 18px;
     align-items: stretch;
     margin-bottom: 18px;
@@ -105,38 +105,90 @@
   }
 
   .settings {
-    padding: 20px;
+    padding: 16px;
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 14px;
+    grid-template-columns: 1fr;
+    gap: 8px;
     align-content: start;
+    align-self: start;
     background:
-      radial-gradient(circle at 100% 0%, rgba(190, 223, 255, .22), transparent 25%),
-      linear-gradient(180deg, rgba(255,255,255,.88), rgba(255,255,255,.74));
+      radial-gradient(circle at 100% 0%, rgba(190, 223, 255, .14), transparent 24%),
+      linear-gradient(180deg, rgba(255,255,255,.92), rgba(250,251,253,.84));
   }
 
   .settings-title {
     grid-column: 1 / -1;
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 10px;
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: 600;
+    padding: 2px 4px 10px;
+  }
+
+  .settings-title strong {
+    display: inline-flex;
     align-items: center;
     gap: 8px;
-    color: var(--muted);
-    font-size: 14px;
-    font-weight: 600;
+    min-width: 0;
+  }
+
+  .settings-title strong::before {
+    content: "";
+    display: inline-block;
+    width: 38px;
+    height: 10px;
+    border-radius: 999px;
+    background:
+      radial-gradient(circle at 5px 5px, #ff5f57 0 4px, transparent 4.5px),
+      radial-gradient(circle at 19px 5px, #ffbd2e 0 4px, transparent 4.5px),
+      radial-gradient(circle at 33px 5px, #28c840 0 4px, transparent 4.5px);
+    box-shadow: 0 1px 2px rgba(0,0,0,.08);
+    flex: 0 0 auto;
+  }
+
+  .settings-title span {
+    font-size: 12px;
+    white-space: nowrap;
+    opacity: .82;
   }
 
   .field {
     min-width: 0;
+    display: grid;
+    grid-template-columns: minmax(108px, 1fr) minmax(150px, 1.12fr);
+    align-items: center;
+    gap: 12px;
+    padding: 10px 12px;
+    border-radius: 14px;
+    border: 1px solid rgba(29,29,31,.06);
+    background:
+      linear-gradient(180deg, rgba(255,255,255,.86), rgba(247,248,251,.76));
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,.82),
+      0 2px 8px rgba(0,0,0,.025);
+  }
+
+  .field + .field {
+    margin-top: 2px;
+  }
+
+  .field:hover {
+    background:
+      linear-gradient(180deg, rgba(255,255,255,.94), rgba(247,248,251,.84));
   }
 
   .field label {
     display: block;
     color: var(--muted);
-    font-size: 12px;
-    margin-bottom: 8px;
-    font-weight: 600;
+    font-size: 13px;
+    margin-bottom: 0;
+    font-weight: 700;
     letter-spacing: .01em;
+    line-height: 1.35;
+    padding-left: 2px;
   }
 
   input, select, button {
@@ -156,6 +208,23 @@
   .field select {
     width: 100%;
     display: block;
+  }
+
+  .settings .field {
+    max-width: 100%;
+  }
+
+  .settings .field select {
+    justify-self: end;
+    max-width: 100%;
+  }
+
+  .settings .field select,
+  .settings .field input {
+    border-radius: 12px;
+    padding: 9px 12px;
+    font-size: 14px;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.88), 0 1px 4px rgba(0,0,0,.03);
   }
 
   input:focus, select:focus {
@@ -542,6 +611,18 @@
     margin-top: 10px;
   }
 
+
+  @media (max-width: 1180px) {
+    .hero {
+      grid-template-columns: minmax(0, 1.32fr) minmax(300px, .74fr);
+    }
+
+    .field {
+      grid-template-columns: 1fr;
+      gap: 8px;
+    }
+  }
+
   @media (max-width: 1140px) {
     .toolbar {
       grid-template-columns: minmax(0, 1fr) minmax(120px, 150px) repeat(3, auto);
@@ -569,9 +650,18 @@
       padding: 14px 10px 34px;
     }
 
-    .settings,
     .stats {
       grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .field {
+      grid-template-columns: 1fr;
+      gap: 10px;
+      padding: 13px;
+    }
+
+    .field label {
+      font-size: 13px;
     }
 
     .stat b {
@@ -691,8 +781,26 @@
 
   body.dark-theme .settings {
     background:
-      radial-gradient(circle at 100% 0%, rgba(59,130,246,.14), transparent 24%),
+      radial-gradient(circle at 100% 0%, rgba(59,130,246,.12), transparent 24%),
       linear-gradient(180deg, rgba(20,26,40,.92), rgba(14,18,29,.88));
+  }
+
+  body.dark-theme .field {
+    background:
+      linear-gradient(180deg, rgba(27,33,47,.88), rgba(18,23,34,.86));
+    border-color: rgba(255,255,255,.055);
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,.035),
+      0 2px 8px rgba(0,0,0,.18);
+  }
+
+  body.dark-theme .field:hover {
+    background:
+      linear-gradient(180deg, rgba(31,38,54,.92), rgba(20,26,38,.88));
+  }
+
+  body.dark-theme .settings-title strong::before {
+    box-shadow: 0 1px 3px rgba(0,0,0,.35);
   }
 
   body.dark-theme .subtitle,
@@ -811,6 +919,110 @@
     border-color: rgba(255,255,255,.06);
   }
 
+
+  /* v1.4.7: macOS Preferences-style refinement without decorative window dots */
+  .settings-title strong::before,
+  body.dark-theme .settings-title strong::before {
+    display: none !important;
+    content: none !important;
+  }
+
+  .hero {
+    grid-template-columns: minmax(0, 1.50fr) minmax(290px, .58fr);
+  }
+
+  .settings {
+    padding: 16px;
+    gap: 8px;
+  }
+
+  .settings-title {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    padding: 2px 4px 10px;
+  }
+
+  .field {
+    grid-template-columns: minmax(138px, 1.35fr) minmax(170px, .95fr);
+    gap: 12px;
+    padding: 10px 12px;
+    border-radius: 16px;
+    border-color: rgba(29,29,31,.055);
+    background: rgba(255,255,255,.34);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.56);
+  }
+
+  .field + .field {
+    margin-top: 0;
+  }
+
+  .field:hover {
+    background: rgba(255,255,255,.44);
+  }
+
+  .field label {
+    font-size: 13px;
+  }
+
+  .settings .field select,
+  .settings .field input {
+    justify-self: end;
+    width: 100%;
+    max-width: 220px;
+    border-radius: 12px;
+    padding: 9px 12px;
+    font-size: 14px;
+  }
+
+  .settings .field:nth-of-type(3) select {
+    max-width: 260px;
+  }
+
+  .settings .field:nth-of-type(2) select,
+  .settings .field:nth-of-type(4) select {
+    max-width: 190px;
+  }
+
+  body.dark-theme .field {
+    background: rgba(255,255,255,.035);
+    border-color: rgba(255,255,255,.055);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.035);
+  }
+
+  body.dark-theme .field:hover {
+    background: rgba(255,255,255,.055);
+  }
+
+  @media (max-width: 1180px) {
+    .hero {
+      grid-template-columns: minmax(0, 1.28fr) minmax(300px, .72fr);
+    }
+
+    .field {
+      grid-template-columns: 1fr;
+      gap: 8px;
+    }
+
+    .settings .field select,
+    .settings .field input {
+      max-width: 100%;
+    }
+  }
+
+  @media (max-width: 1080px) {
+    .hero {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 760px) {
+    .field {
+      grid-template-columns: 1fr;
+      gap: 10px;
+      padding: 13px;
+    }
+  }
+
 </style>
 </head>
 <body>
@@ -824,7 +1036,7 @@
     <section class="panel settings">
       <div class="settings-title">
         <strong id="settingsTitle"></strong>
-        <span>v1.4.2 · Author: BertYin</span>
+        <span>v1.4.7 · Author: BertYin</span>
       </div>
       <div class="field">
         <label id="themeLabel" for="themeSelect"></label>
@@ -927,7 +1139,7 @@ const I18N = {
   zh: {
     htmlLang: "zh-CN",
     appTitle: "三角洲阿萨拉牌盒记牌器",
-    subtitle: "本地优先的阿萨拉牌盒收集工具。无需登录，不上传数据。支持数量记录、重复牌统计、缺卡清单、搜索筛选、中英文界面、点数排序、浅色/深色模式、JSON/CSV 导出与 JSON 导入。现已升级为更接近 Apple 官网的极简高级展示风格界面。",
+    subtitle: "本地优先的阿萨拉牌盒收集工具。无需登录，不上传数据。支持数量记录、重复牌统计、缺卡清单、搜索筛选、中英文界面、点数排序、浅色/深色模式、JSON/CSV 导出与 JSON 导入",
     settings: "设置",
     language: "语言",
     order: "点数排序",
