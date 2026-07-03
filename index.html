@@ -1135,6 +1135,338 @@
     }
   }
 
+
+  /* v1.4.12: slightly narrower settings panel, full rank-order label still visible */
+  .hero {
+    grid-template-columns: minmax(0, 1.33fr) minmax(390px, .67fr);
+  }
+
+  .settings .order-field select {
+    width: 274px;
+    max-width: 274px;
+  }
+
+  .settings .theme-field select,
+  .settings .language-field select {
+    width: 164px;
+    max-width: 164px;
+  }
+
+  @media (max-width: 1180px) {
+    .hero {
+      grid-template-columns: 1fr;
+    }
+
+    .settings .order-field select {
+      width: 274px;
+      max-width: 274px;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .settings .order-field select,
+    .settings .theme-field select,
+    .settings .language-field select {
+      width: 100%;
+      max-width: 100%;
+    }
+  }
+
+
+  /* v1.4.13: fix rank-order dropdown overflow by using a balanced two-column row */
+  .hero {
+    grid-template-columns: minmax(0, 1.28fr) minmax(410px, .72fr);
+  }
+
+  .settings .field {
+    grid-template-columns: 94px minmax(0, 1fr);
+    overflow: hidden;
+  }
+
+  .settings .field label {
+    white-space: nowrap;
+  }
+
+  .settings .field select,
+  .settings .field input,
+  .settings .order-field select,
+  .settings .theme-field select,
+  .settings .language-field select {
+    width: 100%;
+    max-width: 100%;
+    justify-self: stretch;
+    box-sizing: border-box;
+  }
+
+  .settings .order-field {
+    grid-template-columns: 94px minmax(0, 1fr);
+  }
+
+  @media (max-width: 1180px) {
+    .hero {
+      grid-template-columns: 1fr;
+    }
+
+    .settings .field,
+    .settings .order-field {
+      grid-template-columns: 94px minmax(0, 1fr);
+    }
+  }
+
+  @media (max-width: 560px) {
+    .settings .field,
+    .settings .order-field {
+      grid-template-columns: 1fr;
+      overflow: visible;
+    }
+  }
+
+
+  /* v1.4.14: unified Apple/macOS-style shadow system */
+  :root {
+    --shadow-panel: 0 14px 36px rgba(0,0,0,.065), 0 3px 12px rgba(0,0,0,.035);
+    --shadow-card: 0 8px 22px rgba(0,0,0,.05), 0 2px 8px rgba(0,0,0,.025);
+    --shadow-control: 0 3px 10px rgba(0,0,0,.038), inset 0 1px 0 rgba(255,255,255,.78);
+    --shadow-list: 0 2px 8px rgba(0,0,0,.028);
+    --shadow-hover: 0 12px 28px rgba(0,0,0,.07), 0 4px 12px rgba(0,0,0,.035);
+  }
+
+  body.dark-theme {
+    --shadow-panel: 0 18px 42px rgba(0,0,0,.34), 0 4px 14px rgba(0,0,0,.22);
+    --shadow-card: 0 12px 26px rgba(0,0,0,.26), 0 3px 10px rgba(0,0,0,.18);
+    --shadow-control: 0 3px 10px rgba(0,0,0,.24), inset 0 1px 0 rgba(255,255,255,.045);
+    --shadow-list: 0 3px 10px rgba(0,0,0,.18);
+    --shadow-hover: 0 16px 32px rgba(0,0,0,.32), 0 4px 14px rgba(0,0,0,.22);
+  }
+
+  .panel,
+  .titlebox,
+  .settings,
+  .toolbar,
+  .card-grid-panel,
+  .sidebox {
+    box-shadow: var(--shadow-panel) !important;
+  }
+
+  .stat,
+  .tile,
+  .rank-label {
+    box-shadow: var(--shadow-card) !important;
+  }
+
+  input,
+  select,
+  button,
+  .qty,
+  .mini,
+  .badge {
+    box-shadow: var(--shadow-control) !important;
+  }
+
+  .list li {
+    box-shadow: var(--shadow-list) !important;
+  }
+
+  .tile:hover,
+  .stat:hover,
+  button:hover {
+    box-shadow: var(--shadow-hover) !important;
+  }
+
+  .progress {
+    box-shadow: inset 0 2px 5px rgba(0,0,0,.055), 0 2px 8px rgba(0,0,0,.025) !important;
+  }
+
+  body.dark-theme .progress {
+    box-shadow: inset 0 2px 5px rgba(0,0,0,.35), 0 3px 10px rgba(0,0,0,.20) !important;
+  }
+
+  .settings .field {
+    box-shadow: 0 4px 14px rgba(0,0,0,.035), inset 0 1px 0 rgba(255,255,255,.48) !important;
+  }
+
+  body.dark-theme .settings .field {
+    box-shadow: 0 5px 14px rgba(0,0,0,.22), inset 0 1px 0 rgba(255,255,255,.035) !important;
+  }
+
+
+  /* v1.4.15: refined dashboard metric numbers */
+  .stat {
+    isolation: isolate;
+  }
+
+  .stat b {
+    position: relative;
+    display: inline-block;
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum" 1, "case" 1;
+    font-size: clamp(42px, 4.2vw, 56px);
+    line-height: .9;
+    letter-spacing: -.06em;
+    font-weight: 800;
+    margin-bottom: 12px;
+    filter: drop-shadow(0 7px 14px rgba(0,0,0,.08));
+  }
+
+  .stat b::after {
+    content: "";
+    position: absolute;
+    left: 8%;
+    right: 8%;
+    bottom: -10px;
+    height: 10px;
+    border-radius: 999px;
+    background: currentColor;
+    opacity: .16;
+    filter: blur(10px);
+    z-index: -1;
+  }
+
+  .stats .stat:nth-child(1) b {
+    color: #007aff;
+    background: linear-gradient(180deg, #30a2ff 0%, #0071e3 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .stats .stat:nth-child(2) b {
+    color: #8e8cf0;
+    background: linear-gradient(180deg, #aaa7ff 0%, #7c75f0 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .stats .stat:nth-child(3) b {
+    color: #34c759;
+    background: linear-gradient(180deg, #4fdf79 0%, #25b84b 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .stats .stat:nth-child(4) b {
+    color: #ff9f0a;
+    background: linear-gradient(180deg, #ffbd45 0%, #ff9500 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .stat span {
+    font-weight: 700;
+    letter-spacing: -.01em;
+  }
+
+  body.dark-theme .stat b {
+    filter:
+      drop-shadow(0 10px 18px rgba(0,0,0,.22))
+      drop-shadow(0 0 14px rgba(255,255,255,.035));
+  }
+
+  body.dark-theme .stat b::after {
+    opacity: .22;
+  }
+
+  body.dark-theme .stats .stat:nth-child(1) b {
+    color: #54a9ff;
+    background: linear-gradient(180deg, #7cc3ff 0%, #2f87ff 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  body.dark-theme .stats .stat:nth-child(2) b {
+    color: #a9a7ff;
+    background: linear-gradient(180deg, #c4c2ff 0%, #918bff 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  body.dark-theme .stats .stat:nth-child(3) b {
+    color: #49dc76;
+    background: linear-gradient(180deg, #63ee8f 0%, #2ccc5b 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  body.dark-theme .stats .stat:nth-child(4) b {
+    color: #ffb340;
+    background: linear-gradient(180deg, #ffd36a 0%, #ff9f0a 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  @media (max-width: 760px) {
+    .stat b {
+      font-size: clamp(36px, 12vw, 48px);
+    }
+  }
+
+
+  /* v1.4.16: keep metric number above the label */
+  .stat {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    justify-content: center !important;
+    gap: 10px !important;
+  }
+
+  .stat b {
+    display: block !important;
+    margin: 0 !important;
+    flex: 0 0 auto !important;
+  }
+
+  .stat span {
+    display: block !important;
+    width: 100% !important;
+    flex: 0 0 auto !important;
+    margin: 0 !important;
+  }
+
+
+  /* v1.4.17: centered metric card content and simplified beginner copy */
+  .stat {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    gap: 12px !important;
+  }
+
+  .stat b {
+    display: block !important;
+    margin: 0 !important;
+    text-align: center !important;
+  }
+
+  .stat span {
+    display: block !important;
+    width: 100% !important;
+    margin: 0 !important;
+    text-align: center !important;
+  }
+
+
+  /* v1.4.18: prevent gradient metric digits from clipping on glyph edges */
+  .stat b {
+    overflow: visible !important;
+    padding-inline: .055em !important;
+    letter-spacing: -.035em !important;
+  }
+
+  .stat b::after {
+    left: 12% !important;
+    right: 12% !important;
+  }
+
 </style>
 </head>
 <body>
@@ -1148,7 +1480,7 @@
     <section class="panel settings">
       <div class="settings-title">
         <strong id="settingsTitle"></strong>
-        <span>v1.4.11 · Author: BertYin</span>
+        <span>v1.4.18 · Author: BertYin</span>
       </div>
       <div class="field theme-field">
         <label id="themeLabel" for="themeSelect"></label>
@@ -1251,7 +1583,7 @@ const I18N = {
   zh: {
     htmlLang: "zh-CN",
     appTitle: "三角洲阿萨拉牌盒记牌器",
-    subtitle: "本地优先的阿萨拉牌盒收集工具。无需登录，不上传数据。支持数量记录、重复牌统计、缺卡清单、搜索筛选、中英文界面、点数排序、浅色/深色模式、JSON/CSV 导出与 JSON 导入。",
+    subtitle: "一个本地保存的阿萨拉牌盒收集记录工具。点 + / - 记录数量，自动统计已收集、缺卡和重复牌；支持搜索、筛选、备份与中英文切换。",
     settings: "设置",
     language: "语言",
     order: "点数排序",
@@ -1295,7 +1627,7 @@ const I18N = {
   en: {
     htmlLang: "en",
     appTitle: "Delta Force Asala Card Tracker",
-    subtitle: "A local-first tracker for Asala card collection. No login, no upload. Supports quantities, duplicate tracking, missing list, search, filters, Chinese/English UI, rank sorting, light/dark modes, JSON/CSV export, and JSON import. Now refreshed with a cleaner Apple website-inspired premium presentation UI.",
+    subtitle: "A local-first Asala card collection tracker. Use + / - to record quantities, automatically track collected, missing, and duplicate cards, and use search, filters, backups, and bilingual UI.",
     settings: "Settings",
     language: "Language",
     order: "Rank order",
