@@ -1467,6 +1467,16 @@
     right: 12% !important;
   }
 
+
+  /* v1.4.19: recently added side panel */
+  #recentList li small {
+    color: var(--blue);
+  }
+
+  body.dark-theme #recentList li small {
+    color: #7bb7ff;
+  }
+
 </style>
 </head>
 <body>
@@ -1480,7 +1490,7 @@
     <section class="panel settings">
       <div class="settings-title">
         <strong id="settingsTitle"></strong>
-        <span>v1.4.18 · Author: BertYin</span>
+        <span>v1.4.19 · Author: BertYin</span>
       </div>
       <div class="field theme-field">
         <label id="themeLabel" for="themeSelect"></label>
@@ -1544,6 +1554,12 @@
 
     <aside class="side">
       <section class="panel sidebox">
+        <h3 id="recentTitle"></h3>
+        <ul class="list" id="recentList"></ul>
+        <div id="recentEmpty" class="empty"></div>
+      </section>
+
+      <section class="panel sidebox">
         <h3 id="duplicatesTitle"></h3>
         <ul class="list" id="dupList"></ul>
         <div id="dupEmpty" class="empty"></div>
@@ -1569,7 +1585,8 @@ const STORAGE_KEYS = {
   cards: "delta_asala_cards_public_v1",
   lang: "delta_asala_language_public_v1",
   order: "delta_asala_order_public_v1",
-  theme: "delta_asala_theme_public_v1"
+  theme: "delta_asala_theme_public_v1",
+  recent: "delta_asala_recent_public_v1"
 };
 
 const RANK_ORDERS = {
@@ -1607,6 +1624,8 @@ const I18N = {
     grid: "卡牌格子",
     legend: "绿色=已收集，金边=重复",
     flatNote: "当前为搜索/筛选结果，已切换为自适应横向网格。",
+    recentAdded: "最近添加",
+    noRecent: "暂无最近添加。",
     duplicateCards: "重复牌",
     noDuplicate: "暂无重复牌。",
     missingCards: "缺卡清单",
@@ -1651,6 +1670,8 @@ const I18N = {
     grid: "Card Grid",
     legend: "Green = collected, gold border = duplicate",
     flatNote: "Current search/filter results are shown as an adaptive horizontal grid.",
+    recentAdded: "Recently Added",
+    noRecent: "No recent additions.",
     duplicateCards: "Duplicate Cards",
     noDuplicate: "No duplicates.",
     missingCards: "Missing Cards",
@@ -1674,9 +1695,24 @@ let cards = JSON.parse(localStorage.getItem(STORAGE_KEYS.cards) || "null") || st
 let lang = localStorage.getItem(STORAGE_KEYS.lang) || "zh";
 let rankOrder = localStorage.getItem(STORAGE_KEYS.order) || "aceHigh";
 let theme = localStorage.getItem(STORAGE_KEYS.theme) || "light";
+let recent = JSON.parse(localStorage.getItem(STORAGE_KEYS.recent) || "[]");
 
 function t(key) { return I18N[lang][key]; }
 function save() { localStorage.setItem(STORAGE_KEYS.cards, JSON.stringify(cards)); }
+function saveRecent() { localStorage.setItem(STORAGE_KEYS.recent, JSON.stringify(recent)); }
+function recordRecent(id) {
+  const card = cardById(id);
+  if (!card || Number(card.quantity || 0) <= 0) return;
+  recent = [id, ...recent.filter(existingId => existingId !== id)].slice(0, 8);
+  saveRecent();
+}
+function pruneRecent() {
+  recent = recent.filter(id => {
+    const card = cardById(id);
+    return card && Number(card.quantity || 0) > 0;
+  }).slice(0, 8);
+  saveRecent();
+}
 function saveSettings() {
   localStorage.setItem(STORAGE_KEYS.lang, lang);
   localStorage.setItem(STORAGE_KEYS.order, rankOrder);
@@ -1699,7 +1735,9 @@ function cardBySuitRank(suitZh, rank) { return cards.find(c => c.suitZh === suit
 function setQty(id, value) {
   const card = cardById(id);
   if (!card) return;
+  const previous = Number(card.quantity || 0);
   card.quantity = Math.max(0, parseInt(value || "0", 10));
+  if (card.quantity > previous) recordRecent(id);
   save();
   render();
 }
@@ -1707,7 +1745,9 @@ function setQty(id, value) {
 function inc(id, delta) {
   const card = cardById(id);
   if (!card) return;
-  card.quantity = Math.max(0, Number(card.quantity || 0) + delta);
+  const previous = Number(card.quantity || 0);
+  card.quantity = Math.max(0, previous + delta);
+  if (card.quantity > previous) recordRecent(id);
   save();
   render();
 }
@@ -1810,6 +1850,12 @@ function updateStats() {
 }
 
 function updateSideLists() {
+  pruneRecent();
+  const recentList = document.getElementById("recentList");
+  const recentCards = recent.map(id => cardById(id)).filter(c => c && Number(c.quantity || 0) > 0);
+  recentList.innerHTML = recentCards.map(c => `<li><span>${displayName(c)}</span><small>×${c.quantity}</small></li>`).join("");
+  document.getElementById("recentEmpty").style.display = recentCards.length ? "none" : "block";
+
   const dupList = document.getElementById("dupList");
   const dupCards = cards.filter(c => c.quantity > 1);
   dupList.innerHTML = dupCards.map(c => `<li><span>${displayName(c)}</span><small>×${c.quantity}</small></li>`).join("");
@@ -1847,6 +1893,8 @@ function updateText() {
   document.getElementById("gridTitle").textContent = t("grid");
   document.getElementById("legendText").textContent = t("legend");
   document.getElementById("flatNote").textContent = t("flatNote");
+  document.getElementById("recentTitle").textContent = t("recentAdded");
+  document.getElementById("recentEmpty").textContent = t("noRecent");
   document.getElementById("duplicatesTitle").textContent = t("duplicateCards");
   document.getElementById("dupEmpty").textContent = t("noDuplicate");
   document.getElementById("missingTitle").textContent = t("missingCards");
@@ -1892,7 +1940,9 @@ function changeTheme(value) {
 function resetProgress() {
   if (!confirm(t("resetConfirm"))) return;
   cards = structuredClone(INITIAL_CARDS);
+  recent = [];
   save();
+  saveRecent();
   render();
 }
 
@@ -1947,7 +1997,9 @@ async function importJSON(event) {
       cards = JSON.parse(localStorage.getItem(STORAGE_KEYS.cards) || "null") || structuredClone(INITIAL_CARDS);
       return;
     }
+    recent = cards.filter(c => Number(c.quantity || 0) > 0).slice(0, 8).map(c => c.id);
     save();
+    saveRecent();
     render();
   } catch {
     alert(t("importFailed"));
